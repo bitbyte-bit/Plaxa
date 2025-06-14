@@ -1,0 +1,46 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f0f0f0; }
+    h1 { color: #203a43; }
+    .summary { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .item-list { margin-top: 1rem; }
+    .item-list li { margin: 0.5rem 0; }
+  </style>
+</head>
+<body>
+
+  <h1>📊 Admin Dashboard</h1>
+
+  <div class="summary">
+    <p>Total Items in Store: <strong id="totalItems">0</strong></p>
+    <p>Total Stock Count: <strong id="totalStock">0</strong></p>
+    <div class="item-list">
+      <h3>Stored Products:</h3>
+      <ul id="itemList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const totalItems = document.getElementById("totalItems");
+    const totalStock = document.getElementById("totalStock");
+    const itemList = document.getElementById("itemList");
+
+    function loadAdminData() {
+      const items = JSON.parse(localStorage.getItem("storedItems") || "[]");
+      totalItems.textContent = items.length;
+      totalStock.textContent = items.reduce((sum, item) => sum + parseInt(item.qty), 0);
+
+      itemList.innerHTML = items.map(item => `
+        <li>${item.name} (Stock: ${item.qty}, Price: $${item.price})</li>
+      `).join('');
+    }
+
+    window.onload = loadAdminData;
+  </script>
+</body>
+</html>
